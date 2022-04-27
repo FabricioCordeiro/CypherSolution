@@ -2,7 +2,7 @@ Imports System.Security.Cryptography
 Imports System.Text
 Imports System.IO
 
-Public Class Decrypt
+Public Class Cypher
     Public Shared Function Saida(cipherText As String)
         Dim CipherTextBytes = Convert.FromBase64String(cipherText)
 
