@@ -9,10 +9,10 @@ Public Class Cypher
             Throw New ArgumentNullException(NameOf(texto))
         End If
         If (String.IsNullOrEmpty(chave.ToString())) Then
-            Throw New ArgumentNullException(NameOf(texto))
+            Throw New ArgumentNullException(NameOf(chave))
         End If
         If (String.IsNullOrEmpty(vetor.ToString())) Then
-            Throw New ArgumentNullException(NameOf(texto))
+            Throw New ArgumentNullException(NameOf(vetor))
         End If
 
         ' Criação do objeto AES.
@@ -23,12 +23,11 @@ Public Class Cypher
 
         ' Criação dos fluxos usados ​​para a criptografia.
         Using memoryStreamObj As New MemoryStream
-
             Using cryptoStream As New CryptoStream(memoryStreamObj, encryptor, CryptoStreamMode.Write)
                 Using streamWriterObj As New StreamWriter(cryptoStream)
 
                     ' Gravação de todos os dados no stream.
-                    streamWriterObj.Write(texto)
+                    Await streamWriterObj.WriteAsync(texto)
 
                 End Using
             End Using
@@ -39,29 +38,29 @@ Public Class Cypher
         End Using
     End Function
 
-    Public Shared Async Function Decrypt(texto As String, chave As Byte(), vetor As Byte()) As Task(Of String)
+    Public Shared Async Function Decrypt(cipherText As Byte(), chave As Byte(), vetor As Byte()) As Task(Of String)
 
         ' Checagem de argumentos.
-        If (String.IsNullOrEmpty(texto)) Then
-            Throw New ArgumentNullException(NameOf(texto))
+        If (String.IsNullOrEmpty(cipherText.ToString())) Then
+            Throw New ArgumentNullException(NameOf(cipherText))
         End If
         If (String.IsNullOrEmpty(chave.ToString())) Then
-            Throw New ArgumentNullException(NameOf(texto))
+            Throw New ArgumentNullException(NameOf(chave))
         End If
         If (String.IsNullOrEmpty(vetor.ToString())) Then
-            Throw New ArgumentNullException(NameOf(texto))
+            Throw New ArgumentNullException(NameOf(vetor))
         End If
 
         ' Criação do objeto AES.
         Dim aesObj = Aes.Create()
 
         ' Criação de um criptografador para realizar a transformação de fluxo.
-        Dim encryptor = aesObj.CreateEncryptor(chave, vetor)
+        Dim decryptor = aesObj.CreateDecryptor(chave, vetor)
 
-        ' Create the streams used for decryption.
+        ' Criação dos streams usados ​​para a descriptografia
         Using memoryStreamObj As New MemoryStream
-            Using cryptoStreamObj As New CryptoStream(memoryStreamObj, encryptor, CryptoStreamMode.Read)
-                Using streamReaderObj As New StreamReader(cryptoStreamObj)
+            Using cryptoStream As New CryptoStream(memoryStreamObj, decryptor, CryptoStreamMode.Read)
+                Using streamReaderObj As New StreamReader(cryptoStream)
 
                     'retorno dos bytes descriptografados do fluxo de descriptografia.
                     Return Await streamReaderObj.ReadToEndAsync()

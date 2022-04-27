@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LibraryCSharp\LibraryCSharp.csproj" />
+    <ProjectReference Include="..\LibraryCSharp\LibraryCsharp.csproj" />
     <ProjectReference Include="..\LibraryVisualBasic\LibraryVisualBasic.vbproj" />
   </ItemGroup>
 

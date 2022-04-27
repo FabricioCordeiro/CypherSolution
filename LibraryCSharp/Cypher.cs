@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
+using LibraryVisualBasic;
 
-namespace LibraryCSharp;
+namespace LibraryCsharp;
 
 public static class Cypher
 {
@@ -9,9 +10,9 @@ public static class Cypher
         // Checagem de argumentos.
         if (string.IsNullOrEmpty(texto))
             throw new ArgumentNullException(nameof(texto));
-        if (chave == null || chave.Length <= 0)
+        if (string.IsNullOrEmpty(chave.ToString()))
             throw new ArgumentNullException(nameof(chave));
-        if (vetor == null || vetor.Length <= 0)
+        if (string.IsNullOrEmpty(vetor.ToString()))
             throw new ArgumentNullException(nameof(vetor));
 
         // Criação do objeto AES.
@@ -22,7 +23,6 @@ public static class Cypher
 
         // Criação dos fluxos usados ​​para a criptografia.
         using MemoryStream memoryStream = new();
-
         using CryptoStream cryptoStream = new(memoryStream, encryptor, CryptoStreamMode.Write);
         using (StreamWriter streamWriter = new(cryptoStream))
         {
@@ -37,22 +37,21 @@ public static class Cypher
     public static async Task<string> Decrypt(byte[] cipherText, byte[] chave, byte[] vetor)
     {
         // Checagem de argumentos.
-        if (cipherText == null || cipherText.Length <= 0)
+        if (string.IsNullOrEmpty(cipherText.ToString()))
             throw new ArgumentNullException(nameof(cipherText));
-        if (chave == null || chave.Length <= 0)
+        if (string.IsNullOrEmpty(chave.ToString()))
             throw new ArgumentNullException(nameof(chave));
-        if (vetor == null || vetor.Length <= 0)
+        if (string.IsNullOrEmpty(vetor.ToString()))
             throw new ArgumentNullException(nameof(vetor));
 
         // Criação do objeto AES.
         using Aes aesAlg = Aes.Create();
 
-        // Criação dos fluxos usados ​​para a descriptografia.
+        // Criação de um criptografador para realizar a transformação de fluxo.
         ICryptoTransform decryptor = aesAlg.CreateDecryptor(chave, vetor);
 
-        // Create the streams used for decryption.
+        // Criação dos streams usados ​​para a descriptografia
         using MemoryStream memoryStream = new(cipherText);
-
         using CryptoStream cryptoStream = new(memoryStream, decryptor, CryptoStreamMode.Read);
         using StreamReader streamReader = new(cryptoStream);
 
