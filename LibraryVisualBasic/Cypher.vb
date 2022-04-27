@@ -58,11 +58,10 @@ Public Class Cypher
         Dim decryptor = aesObj.CreateDecryptor(chave, vetor)
 
         ' Criação dos streams usados ​​para a descriptografia
-        Using memoryStreamObj As New MemoryStream
+        Using memoryStreamObj As New MemoryStream(cipherText)
             Using cryptoStream As New CryptoStream(memoryStreamObj, decryptor, CryptoStreamMode.Read)
                 Using streamReaderObj As New StreamReader(cryptoStream)
-
-                    'retorno dos bytes descriptografados do fluxo de descriptografia.
+                    'retorno dos bytes descriptografados do fluxo dse descriptografia.
                     Return Await streamReaderObj.ReadToEndAsync()
 
                 End Using

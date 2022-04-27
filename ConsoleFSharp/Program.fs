@@ -2,9 +2,9 @@
 open System.Text
 open System.Security.Cryptography
 
-let salt = Encoding.UTF8.GetBytes(")(!@&#)&!)@&$)!&@#)!*&@)*(#")
-let pureKey = Encoding.UTF8.GetBytes("(!*@(#*@&!*@(#*@&!**@(#)@(#*@&##")
-let iv = Encoding.UTF8.GetBytes("DasJ12H4$pPP0XC1");
+let salt = Encoding.UTF8.GetBytes("6c4980a904cc2564ad7f02db67d99cb9")
+let pureKey = Encoding.UTF8.GetBytes("a8ebfff7e54ebc78642cd671d142d18b")
+let iv = Encoding.UTF8.GetBytes("qOv/9+VOvHhkLNZx");
 
 let key = (new Rfc2898DeriveBytes(pureKey, salt, 1000)).GetBytes(256 / 8)
 
@@ -33,7 +33,7 @@ printfn ""
 
 //VB.NET
 let VBEncrypt = LibraryVisualBasic.Cypher.Encrypt(texto, key, iv).Result
-let VBDecrypt = LibraryVisualBasic.Cypher.Decrypt(VBEncrypt, key, iv).ToString()
+let VBDecrypt = LibraryVisualBasic.Cypher.Decrypt(VBEncrypt, key, iv).Result
 
 printfn " Com VB.NET"
 printfn ""
@@ -49,7 +49,7 @@ printfn ""
 
 //Criptografado em C# e Descriptografado em VB.NET
 let CsharpEncryptToVB = LibraryCsharp.Cypher.Encrypt(texto, key, iv).Result
-let VBDecryptCsharp = LibraryVisualBasic.Cypher.Decrypt(CsharpEncryptToVB, key, iv).ToString()
+let VBDecryptCsharp = LibraryVisualBasic.Cypher.Decrypt(CsharpEncryptToVB, key, iv).Result
 
 printfn " Criptografado em C# e Descriptografado em VB.NET"
 printfn ""
