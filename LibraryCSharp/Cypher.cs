@@ -1,5 +1,4 @@
 ﻿using System.Security.Cryptography;
-using System.Text;
 
 namespace LibraryCSharp;
 
@@ -8,7 +7,7 @@ public static class Cypher
     public static async Task<byte[]> Encrypt(string texto, byte[] chave, byte[] vetor)
     {
         // Checagem de argumentos.
-        if (texto == null || texto.Length <= 0)
+        if (string.IsNullOrEmpty(texto))
             throw new ArgumentNullException(nameof(texto));
         if (chave == null || chave.Length <= 0)
             throw new ArgumentNullException(nameof(chave));
@@ -35,21 +34,21 @@ public static class Cypher
         return memoryStream.ToArray();
     }
 
-    public static async Task<string> Decrypt(byte[] cipherText, byte[] Key, byte[] IV)
+    public static async Task<string> Decrypt(byte[] cipherText, byte[] chave, byte[] vetor)
     {
         // Checagem de argumentos.
         if (cipherText == null || cipherText.Length <= 0)
             throw new ArgumentNullException(nameof(cipherText));
-        if (Key == null || Key.Length <= 0)
-            throw new ArgumentNullException(nameof(Key));
-        if (IV == null || IV.Length <= 0)
-            throw new ArgumentNullException(nameof(IV));
+        if (chave == null || chave.Length <= 0)
+            throw new ArgumentNullException(nameof(chave));
+        if (vetor == null || vetor.Length <= 0)
+            throw new ArgumentNullException(nameof(vetor));
 
         // Criação do objeto AES.
         using Aes aesAlg = Aes.Create();
 
         // Criação dos fluxos usados ​​para a descriptografia.
-        ICryptoTransform decryptor = aesAlg.CreateDecryptor(Key, IV);
+        ICryptoTransform decryptor = aesAlg.CreateDecryptor(chave, vetor);
 
         // Create the streams used for decryption.
         using MemoryStream memoryStream = new(cipherText);

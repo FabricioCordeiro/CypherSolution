@@ -1,33 +1,74 @@
-Imports System.Security.Cryptography
-Imports System.Text
+﻿Imports System.Security.Cryptography
 Imports System.IO
 
 Public Class Cypher
-    Public Shared Function Saida(cipherText As String)
-        Dim CipherTextBytes = Convert.FromBase64String(cipherText)
+    Public Shared Async Function Encrypt(texto As String, chave As Byte(), vetor As Byte()) As Task(Of Byte())
 
-        Dim Key = "3c75dd500c740df4a2e81f1e8dbc418f9eaf183d1b3714a1bf11bbd7c69c1e6f2a29fe76607d49b12096ef54a14c4cbaad3fc39ae2ec108d5a3777e6d5c2265f"
-        Dim InitialVectorBytes = Encoding.UTF8.GetBytes("OFRna73m*aze01xY")
-        Dim SaltBytes = Encoding.UTF8.GetBytes("43a7c01223db11653ce15c035cf05a454053be9669ce32f4af5aeee1f113058eb29dc816cbab67540d4da0566b495a71fa3cc932ef6c5d1f27dc7a4f165dcf2c")
+        ' Checagem de argumentos.
+        If (String.IsNullOrEmpty(texto)) Then
+            Throw New ArgumentNullException(NameOf(texto))
+        End If
+        If (String.IsNullOrEmpty(chave.ToString())) Then
+            Throw New ArgumentNullException(NameOf(texto))
+        End If
+        If (String.IsNullOrEmpty(vetor.ToString())) Then
+            Throw New ArgumentNullException(NameOf(texto))
+        End If
 
-        Dim DerivedKey As New PasswordDeriveBytes(Key, SaltBytes, "SHA256", 1)
-        Dim KeyBytes = DerivedKey.GetBytes(32)
-        Dim SymmetricKey = Aes.Create()
+        ' Criação do objeto AES.
+        Dim aesObj = Aes.Create()
 
-        Dim PlainTextBytes(CipherTextBytes.Length) As Byte
+        ' Criação de um criptografador para realizar a transformação de fluxo.
+        Dim encryptor = aesObj.CreateEncryptor(chave, vetor)
 
-        Dim Decryptor = SymmetricKey.CreateDecryptor(KeyBytes, InitialVectorBytes)
+        ' Criação dos fluxos usados ​​para a criptografia.
+        Using memoryStreamObj As New MemoryStream
 
-        Dim MemStream As New MemoryStream(CipherTextBytes)
-        Dim CryptoStream As New CryptoStream(MemStream, Decryptor, CryptoStreamMode.Read)
+            Using cryptoStream As New CryptoStream(memoryStreamObj, encryptor, CryptoStreamMode.Write)
+                Using streamWriterObj As New StreamWriter(cryptoStream)
 
-        Dim ByteCount
-        ByteCount = CryptoStream.Read(PlainTextBytes, 0, PlainTextBytes.Length)
+                    ' Gravação de todos os dados no stream.
+                    streamWriterObj.Write(texto)
 
-        MemStream.Close()
-        CryptoStream.Close()
-        SymmetricKey.Clear()
+                End Using
+            End Using
 
-        Return Encoding.UTF8.GetString(PlainTextBytes, 0, ByteCount)
+            ' Retorno dos bytes criptografados do fluxo de memória.
+            Return memoryStreamObj.ToArray()
+
+        End Using
+    End Function
+
+    Public Shared Async Function Decrypt(texto As String, chave As Byte(), vetor As Byte()) As Task(Of String)
+
+        ' Checagem de argumentos.
+        If (String.IsNullOrEmpty(texto)) Then
+            Throw New ArgumentNullException(NameOf(texto))
+        End If
+        If (String.IsNullOrEmpty(chave.ToString())) Then
+            Throw New ArgumentNullException(NameOf(texto))
+        End If
+        If (String.IsNullOrEmpty(vetor.ToString())) Then
+            Throw New ArgumentNullException(NameOf(texto))
+        End If
+
+        ' Criação do objeto AES.
+        Dim aesObj = Aes.Create()
+
+        ' Criação de um criptografador para realizar a transformação de fluxo.
+        Dim encryptor = aesObj.CreateEncryptor(chave, vetor)
+
+        ' Create the streams used for decryption.
+        Using memoryStreamObj As New MemoryStream
+            Using cryptoStreamObj As New CryptoStream(memoryStreamObj, encryptor, CryptoStreamMode.Read)
+                Using streamReaderObj As New StreamReader(cryptoStreamObj)
+
+                    'retorno dos bytes descriptografados do fluxo de descriptografia.
+                    Return Await streamReaderObj.ReadToEndAsync()
+
+                End Using
+            End Using
+        End Using
+
     End Function
 End Class
