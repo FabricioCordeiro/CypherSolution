@@ -4,7 +4,7 @@ open System.Security.Cryptography
 
 let salt = Encoding.UTF8.GetBytes("6c4980a904cc2564ad7f02db67d99cb9")
 let pureKey = Encoding.UTF8.GetBytes("a8ebfff7e54ebc78642cd671d142d18b")
-let iv = Encoding.UTF8.GetBytes("qOv/9+VOvHhkLNZx");
+let iv = Encoding.UTF8.GetBytes("qOv/9+VOvHhkLNZx")
 
 let key = (new Rfc2898DeriveBytes(pureKey, salt, 1000)).GetBytes(256 / 8)
 

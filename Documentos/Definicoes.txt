@@ -1,0 +1,9 @@
+Aes: Classe base abstrata da qual qualquer implementação de criptografia AES devem ser herdadas. Fornece o suporte para criptografia AES
+ICryptoTransform = Define as operações básicas de transformações criptográficas. Algoritmos de hash são um exemplo de transformações criptográficas
+MemoryStream = Cria um fluxo cujo repositório de backup é a memória. Provê uma forma de você armazenar um Buffer (dados em bytes crus) em memória
+CryptoStream = Define uma transmissão que liga fluxos de dados a transformações criptográficas. Você pode criptografar um fluxo de dados e, em seguida, a Base 64 codifica a saída de criptografia
+StreamWriter = Implementa um TextWriter para gravar caracteres em um fluxo em uma codificação específica.
+StreamReader = Implementa um TextReader que lê caracteres de um fluxo de bytes em uma codificação específica.
+
+Referencias
+ Documentação: https://docs.microsoft.com/pt-br/dotnet/api/system.security.cryptography.aes?view=net-6.0
