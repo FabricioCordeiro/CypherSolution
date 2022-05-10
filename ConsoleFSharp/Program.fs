@@ -16,7 +16,7 @@ printfn "------------------------------------------------------------------"
 printfn ""
 
 //C#
-let CSharpEncrypt = LibraryCsharp.Cypher.Encrypt(texto, key, iv).Result
+let CSharpEncrypt = LibraryCsharp.Cypher.Encrypt(texto).Result
 let CSharpDecrypt = LibraryCsharp.Cypher.Decrypt(CSharpEncrypt, key, iv).Result
 
 printfn " Com CSHARP"
@@ -48,7 +48,7 @@ printfn "------------------------------------------------------------------"
 printfn ""
 
 //Criptografado em C# e Descriptografado em VB.NET
-let CsharpEncryptToVB = LibraryCsharp.Cypher.Encrypt(texto, key, iv).Result
+let CsharpEncryptToVB = LibraryCsharp.Cypher.Encrypt(texto).Result
 let VBDecryptCsharp = LibraryVisualBasic.Cypher.Decrypt(CsharpEncryptToVB, key, iv).Result
 
 printfn " Criptografado em C# e Descriptografado em VB.NET"

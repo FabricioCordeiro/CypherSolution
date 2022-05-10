@@ -5,21 +5,14 @@ namespace LibraryCsharp;
 
 public static class Cypher
 {
-    public static async Task<byte[]> Encrypt(string texto, byte[] chave, byte[] vetor)
+    public static async Task<byte[]> Encrypt(string texto)
     {
         // Checagem de argumentos.
         if (string.IsNullOrEmpty(texto))
             throw new ArgumentNullException(nameof(texto));
-        if (string.IsNullOrEmpty(chave.ToString()))
-            throw new ArgumentNullException(nameof(chave));
-        if (string.IsNullOrEmpty(vetor.ToString()))
-            throw new ArgumentNullException(nameof(vetor));
-
-        // Criação do objeto AES.
-        using Aes aes = Aes.Create();
 
         // Criação de um criptografador para realizar a transformação de fluxo.
-        ICryptoTransform encryptor = aes.CreateEncryptor(chave, vetor);
+        ICryptoTransform encryptor = new CryptorBase(true).Aes.CreateEncryptor();
 
         // Criação dos fluxos usados ​​para a criptografia.
         using MemoryStream memoryStream = new();
