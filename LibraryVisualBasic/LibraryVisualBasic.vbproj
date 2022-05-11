@@ -5,4 +5,8 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LibraryCSharp\LibraryCsharp.csproj" />
+  </ItemGroup>
+
 </Project>
